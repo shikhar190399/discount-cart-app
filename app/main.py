@@ -47,5 +47,4 @@ async def startup_event():
 from app.routes import cart, checkout, admin
 app.include_router(cart.router, prefix="/api", tags=["Cart"])
 app.include_router(checkout.router, prefix="/api", tags=["Checkout"])
-# TODO: Uncomment when implemented
-# app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
+app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
