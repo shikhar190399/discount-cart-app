@@ -40,10 +40,10 @@ def validate_discount_code(code: str) -> Tuple[bool, Optional[dict], str]:
             break
     
     if not discount_code_obj:
-        return False, None, f"Discount code '{code}' not found"
+        return False, None, "Discount code not found"
     
     if discount_code_obj.get("isUsed", False):
-        return False, discount_code_obj, f"Discount code '{code}' has already been used"
+        return False, discount_code_obj, "Discount code has already been used"
     
     # Code is valid and available
     return True, discount_code_obj, "Discount code is valid"
@@ -54,11 +54,13 @@ def calculate_discount(subtotal: float) -> float:
     Calculate discount amount (10% of subtotal).
     
     Args:
-        subtotal: Order subtotal
+        subtotal: Order subtotal (must be >= 0)
     
     Returns:
         Discount amount rounded to 2 decimal places
     """
+    if subtotal < 0:
+        return 0.0
     discount = subtotal * (DISCOUNT_PERCENT / 100)
     return round(discount, 2)
 
@@ -170,8 +172,8 @@ def checkout(user_id: str, discount_code: Optional[str] = None) -> Tuple[OrderRe
             discount_code_obj["usedAt"] = datetime.now()
         # If invalid, proceed without discount (no error)
     
-    # Calculate total
-    total = round(subtotal - discount_amount, 2)
+    # Calculate total (ensure non-negative)
+    total = max(0.0, round(subtotal - discount_amount, 2))
     
     # Generate order ID
     order_id = f"order{get_order_count() + 1:03d}"

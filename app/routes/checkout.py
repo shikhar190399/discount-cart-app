@@ -39,7 +39,8 @@ def process_checkout(request: CheckoutRequest):
     except HTTPException:
         raise
     except Exception as e:
+        # Log error in production (logging would be added here)
         raise HTTPException(
             status_code=500,
-            detail=f"Internal server error: {str(e)}"
+            detail="An error occurred while processing your request"
         )

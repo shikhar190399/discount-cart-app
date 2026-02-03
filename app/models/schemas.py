@@ -3,7 +3,7 @@ Pydantic schemas for request/response validation.
 """
 
 from typing import Optional, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
 
 
@@ -11,15 +11,19 @@ from datetime import datetime
 
 class AddToCartRequest(BaseModel):
     """Request schema for adding item to cart."""
-    userId: str = Field(..., description="User identifier")
-    itemId: str = Field(..., description="Item identifier")
-    quantity: int = Field(..., gt=0, description="Quantity of items to add")
+    model_config = ConfigDict(str_strip_whitespace=True)
+    
+    userId: str = Field(..., min_length=1, max_length=100, description="User identifier")
+    itemId: str = Field(..., min_length=1, max_length=50, description="Item identifier")
+    quantity: int = Field(..., gt=0, le=1000, description="Quantity of items to add (max 1000)")
 
 
 class CheckoutRequest(BaseModel):
     """Request schema for checkout."""
-    userId: str = Field(..., description="User identifier")
-    discountCode: Optional[str] = Field(None, description="Optional discount code")
+    model_config = ConfigDict(str_strip_whitespace=True)
+    
+    userId: str = Field(..., min_length=1, max_length=100, description="User identifier")
+    discountCode: Optional[str] = Field(None, max_length=50, description="Optional discount code")
 
 
 # ==================== Response Schemas ====================

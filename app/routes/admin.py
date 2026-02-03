@@ -22,9 +22,10 @@ def generate_discount_code():
         response = generate_discount()
         return response
     except Exception as e:
+        # Log error in production (logging would be added here)
         raise HTTPException(
             status_code=500,
-            detail=f"Internal server error: {str(e)}"
+            detail="An error occurred while processing your request"
         )
 
 
@@ -46,7 +47,8 @@ def get_store_statistics():
             statistics=statistics
         )
     except Exception as e:
+        # Log error in production (logging would be added here)
         raise HTTPException(
             status_code=500,
-            detail=f"Internal server error: {str(e)}"
+            detail="An error occurred while processing your request"
         )

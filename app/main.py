@@ -2,14 +2,25 @@
 Main FastAPI application entry point.
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events."""
+    # Startup
+    from app.stores.data import initialize_dummy_data
+    initialize_dummy_data()
+    yield
+    # Shutdown (if needed in future)
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Discount Cart API",
     description="Ecommerce store with discount code functionality",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # CORS middleware for frontend integration
@@ -35,13 +46,6 @@ def root():
 def health_check():
     """Health check endpoint."""
     return {"status": "healthy"}
-
-# Startup event to initialize dummy data
-@app.on_event("startup")
-async def startup_event():
-    """Initialize dummy data on server startup."""
-    from app.stores.data import initialize_dummy_data
-    initialize_dummy_data()
 
 # Include routers
 from app.routes import cart, checkout, admin

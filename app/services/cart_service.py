@@ -32,7 +32,10 @@ def add_item_to_cart(user_id: str, item_id: str, quantity: int) -> CartResponse:
     # Validate item exists
     item = get_item(item_id)
     if not item:
-        raise HTTPException(status_code=404, detail=f"Item '{item_id}' not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Item not found"
+        )
     
     # Get or create cart
     cart = get_cart(user_id)
