@@ -1,0 +1,170 @@
+### Discount Cart API - REST Client Collection
+### For use with VS Code REST Client extension or similar tools
+### Base URL - Update if your server runs on a different port
+
+@base_url = http://localhost:8000
+
+### ============================================
+### UTILITY ENDPOINTS
+### ============================================
+
+### Health Check
+GET {{base_url}}/health
+
+### Root Endpoint
+GET {{base_url}}/
+
+### ============================================
+### CUSTOMER APIs
+### ============================================
+
+### Add Item to Cart
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "user123",
+  "itemId": "item001",
+  "quantity": 2
+}
+
+### Add Another Item to Cart (Same User)
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "user123",
+  "itemId": "item002",
+  "quantity": 1
+}
+
+### Add Same Item Again (Increases Quantity)
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "user123",
+  "itemId": "item001",
+  "quantity": 1
+}
+
+### Checkout Without Discount Code
+POST {{base_url}}/api/checkout
+Content-Type: application/json
+
+{
+  "userId": "user123"
+}
+
+### Add Items to Cart for New User
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "user456",
+  "itemId": "item003",
+  "quantity": 3
+}
+
+### Checkout With Valid Discount Code
+POST {{base_url}}/api/checkout
+Content-Type: application/json
+
+{
+  "userId": "user456",
+  "discountCode": "DISCOUNT1"
+}
+
+### Checkout With Invalid Discount Code (Proceeds Without Discount)
+POST {{base_url}}/api/checkout
+Content-Type: application/json
+
+{
+  "userId": "user789",
+  "discountCode": "INVALID_CODE"
+}
+
+### ============================================
+### ADMIN APIs
+### ============================================
+
+### Generate Discount Code (If Condition Met)
+POST {{base_url}}/api/admin/generate-discount
+
+### Get Store Statistics
+GET {{base_url}}/api/admin/stats
+
+### ============================================
+### EXAMPLE WORKFLOW: Complete Shopping Flow
+### ============================================
+
+### Step 1: Add Items to Cart
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "demo_user",
+  "itemId": "item001",
+  "quantity": 1
+}
+
+### Step 2: Add More Items
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "demo_user",
+  "itemId": "item002",
+  "quantity": 2
+}
+
+### Step 3: Checkout (After 5 orders, discount code will be generated)
+POST {{base_url}}/api/checkout
+Content-Type: application/json
+
+{
+  "userId": "demo_user"
+}
+
+### Step 4: View Statistics
+GET {{base_url}}/api/admin/stats
+
+### ============================================
+### TESTING EDGE CASES
+### ============================================
+
+### Test: Invalid Item ID (Should return 404)
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "test_user",
+  "itemId": "invalid_item",
+  "quantity": 1
+}
+
+### Test: Invalid Quantity (Should return 422)
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "test_user",
+  "itemId": "item001",
+  "quantity": 0
+}
+
+### Test: Empty Cart Checkout (Should return 400)
+POST {{base_url}}/api/checkout
+Content-Type: application/json
+
+{
+  "userId": "empty_cart_user"
+}
+
+### Test: Missing Required Fields (Should return 422)
+POST {{base_url}}/api/cart
+Content-Type: application/json
+
+{
+  "userId": "test_user"
+}

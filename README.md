@@ -307,7 +307,25 @@ Edit `app/config.py` to customize:
 - Order count increments globally (not per user)
 - Discount codes are global (any user can use available code)
 
-## Example Usage Flow
+## API Testing
+
+### Postman Collection
+
+Import `postman_collection.json` into Postman for easy API testing:
+- All endpoints pre-configured
+- Example requests included
+- Environment variables set up
+
+### REST Client (VS Code)
+
+Use `api_requests.http` with VS Code REST Client extension:
+- Open the file in VS Code
+- Click "Send Request" above each request
+- All endpoints ready to test
+
+See `POSTMAN_README.md` for detailed instructions.
+
+### Example Usage Flow
 
 1. **Add items to cart:**
    ```bash

@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "discount-cart-api",
+		"name": "Discount Cart API",
+		"description": "Ecommerce store API with discount code functionality",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customer APIs",
+			"item": [
+				{
+					"name": "Add Item to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"user123\",\n  \"itemId\": \"item001\",\n  \"quantity\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cart",
+							"host": ["{{base_url}}"],
+							"path": ["api", "cart"]
+						},
+						"description": "Add an item to the user's cart. If item already exists, quantity is increased."
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout Without Discount",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"user123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/checkout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "checkout"]
+						},
+						"description": "Place an order without discount code."
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout With Discount",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"user123\",\n  \"discountCode\": \"DISCOUNT1\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/checkout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "checkout"]
+						},
+						"description": "Place an order with discount code. If invalid, proceeds without discount."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin APIs",
+			"item": [
+				{
+					"name": "Generate Discount Code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/generate-discount",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "generate-discount"]
+						},
+						"description": "Manually generate a discount code if nth order condition is met (order count divisible by 5)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/stats",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "stats"]
+						},
+						"description": "Get comprehensive store statistics including total items, revenue, discount codes, and discount amounts."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Utility Endpoints",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						},
+						"description": "Health check endpoint to verify API is running."
+					},
+					"response": []
+				},
+				{
+					"name": "Root Endpoint",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"],
+							"path": [""]
+						},
+						"description": "Root endpoint to verify API is running."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
