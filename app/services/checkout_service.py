@@ -153,24 +153,22 @@ def checkout(user_id: str, discount_code: Optional[str] = None) -> Tuple[OrderRe
     
     subtotal = round(subtotal, 2)
     
-    # Validate and apply discount code
+    # Validate and apply discount code (if provided)
     discount_amount = 0.0
     discount_code_used = None
-    discount_status = {"applied": False, "message": ""}
     
     if discount_code:
         is_valid, discount_code_obj, message = validate_discount_code(discount_code)
         
         if is_valid:
+            # Apply 10% discount
             discount_amount = calculate_discount(subtotal)
             discount_code_used = discount_code
-            discount_status = {"applied": True, "message": "Discount code applied successfully"}
             
             # Mark discount code as used
             discount_code_obj["isUsed"] = True
             discount_code_obj["usedAt"] = datetime.now()
-        else:
-            discount_status = {"applied": False, "message": message}
+        # If invalid, proceed without discount (no error)
     
     # Calculate total
     total = round(subtotal - discount_amount, 2)
@@ -202,12 +200,10 @@ def checkout(user_id: str, discount_code: Optional[str] = None) -> Tuple[OrderRe
     # Add order to system
     add_order(order)
     
-    # Increment order count
+    # Increment order count and check if new discount code should be generated
     new_order_count = increment_order_count()
-    
-    # Check if new discount code should be generated (nth order)
     new_discount_code = None
-    if new_order_count % NTH_ORDER == 0:
+    if new_order_count % NTH_ORDER == 0:  # Every 5th order generates a code
         new_discount_code = create_new_discount_code()
     
     # Clear user's cart

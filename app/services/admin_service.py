@@ -31,7 +31,7 @@ def generate_discount() -> GenerateDiscountResponse:
     current_order_count = get_order_count()
     nth_order = system_state["nthOrder"]
     
-    # Check if condition is met (orderCount % nthOrder == 0)
+    # Check if nth order condition is met (orderCount divisible by nthOrder)
     if current_order_count % nth_order != 0:
         # Condition not met
         orders_remaining = nth_order - (current_order_count % nth_order)
@@ -46,7 +46,7 @@ def generate_discount() -> GenerateDiscountResponse:
             ordersRemaining=orders_remaining
         )
     
-    # Check if unused discount code already exists
+    # Prevent duplicate codes - check if unused code already exists
     available_code = get_available_discount_code()
     if available_code and not available_code.get("isUsed", False):
         return GenerateDiscountResponse(
